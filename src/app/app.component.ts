@@ -34,7 +34,7 @@ export class AppComponent {
   addressRefs: any = {};
   pairRefs: any = {};
 
-  constructor(private readonly web3: Web3Service) {
+  constructor(public readonly web3: Web3Service) {
     this.web3.ready.subscribe((ready) => {
       if (ready) {
         this.setContractRefs();

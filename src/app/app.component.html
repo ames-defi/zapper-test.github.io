@@ -7,7 +7,7 @@
   </div>
 </mat-toolbar>
 <div class="container-fluid">
-  <div class="row zaps">
+  <div class="row zaps" *ngIf="web3.connected">
     <div class="col-md-4" *ngFor="let pool of pools">
       <mat-card>
         <mat-card>
@@ -95,6 +95,12 @@
           </mat-card-content>
         </mat-card>
       </mat-card>
+    </div>
+  </div>
+
+  <div class="row zaps" *ngIf="!web3.connected">
+    <div class="col-md-12">
+      <defi-connect-wallet-button></defi-connect-wallet-button>
     </div>
   </div>
 </div>

@@ -14,7 +14,7 @@ export class ZapInComponent {
     amount: string;
   }>();
   @Input() pool: QuickPool;
-  zapping = false;
+  fetchingBalances = false;
 
   constructor() {}
 

@@ -19,3 +19,26 @@ body {
 .cursor {
   cursor: pointer;
 }
+
+// rgb(0, 174, 233);
+
+.zappadoo {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 4px;
+
+  button {
+    margin-left: 5px;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.zap-header {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 5px;
+}

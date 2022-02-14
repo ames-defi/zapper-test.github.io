@@ -1,3 +1,4 @@
+import { FormattedResult } from 'src/lib/utils/formatting';
 import {
   HARMONY_wONE_ADDRESS,
   QSHARE_ONE_DFK_LP_ADDRESS,
@@ -10,6 +11,7 @@ import {
 
 export interface QuickPool {
   name: string;
+  poolId: number;
   lpAddress: string;
   token0: {
     name: string;
@@ -23,11 +25,14 @@ export interface QuickPool {
   selectedTokenBalance?: number;
   lpTokenBalance?: string;
   loading?: boolean;
+
+  pendingRewards?: FormattedResult;
 }
 
 export const QUARTZ_POOLS: QuickPool[] = [
   {
     name: 'Quartz-UST-LP',
+    poolId: 0,
     lpAddress: QUARTZ_UST_DFK_LP_ADDRESS,
     token0: {
       name: 'Quartz',
@@ -41,6 +46,7 @@ export const QUARTZ_POOLS: QuickPool[] = [
   },
   {
     name: 'Quartz-QShare-LP',
+    poolId: 1,
     lpAddress: QUARTZ_QSHARE_DFK_LP_ADDRESS,
     token0: {
       name: 'Quartz',

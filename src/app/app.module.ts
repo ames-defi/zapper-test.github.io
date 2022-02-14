@@ -13,9 +13,15 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConnectWalletButtonComponent } from './components/connect-wallet-button/connect-wallet-button.component';
 import { ZapInComponent } from './components/zap-in/zap-in.component';
+import { ZapOutComponent } from './components/zap-out/zap-out.component';
 
 @NgModule({
-  declarations: [AppComponent, ConnectWalletButtonComponent, ZapInComponent],
+  declarations: [
+    AppComponent,
+    ConnectWalletButtonComponent,
+    ZapInComponent,
+    ZapOutComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

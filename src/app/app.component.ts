@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BigNumber, ethers } from 'ethers';
 import { formatUnits, parseUnits } from 'ethers/lib/utils';
+import { RewardPool } from 'src/lib/services/reward-pool/reward-pool';
 import { Web3Service } from 'src/lib/services/web3.service';
 import { Zapper } from 'src/lib/services/zapper/zapper';
 import { FormattedResult } from 'src/lib/utils/formatting';
@@ -27,39 +28,16 @@ import { QUARTZ_POOLS } from './data/quartz-pools';
 })
 export class AppComponent {
   private zapper: Zapper;
+  public rewardPool: RewardPool;
   pools = QUARTZ_POOLS;
   fetchingBalances = false;
-  approving = false;
-
-  QuartzBalance = null;
-  QShareBalance = null;
-  UstBalance = null;
-
   addressRefs: any = {};
-
   pairRefs: any = {};
 
   constructor(private readonly web3: Web3Service) {
-    this.web3.ready.subscribe(async (ready) => {
+    this.web3.ready.subscribe((ready) => {
       if (ready) {
-        this.addressRefs[QUARTZ_TOKEN_ADDRESS_HARMONY] = QuartzToken.connect(
-          this.web3.web3Info.signer
-        );
-        this.addressRefs[QSHARE_TOKEN_ADDRESS_HARMONY] = QShareToken.connect(
-          this.web3.web3Info.signer
-        );
-        this.addressRefs[UST_ADDRESS] = UstToken.connect(
-          this.web3.web3Info.signer
-        );
-
-        this.pairRefs[QUARTZ_QSHARE_DFK_LP_ADDRESS] =
-          QSHARE_QUARTZ_PAIR.connect(this.web3.web3Info.signer);
-
-        this.pairRefs[QUARTZ_UST_DFK_LP_ADDRESS] = QUARTZ_UST_PAIR.connect(
-          this.web3.web3Info.signer
-        );
-
-        this.zapper = new Zapper(this.web3, DFK_ROUTER_HARMONY);
+        this.setContractRefs();
         this.setEventListeners();
         this.checkLPs();
       }
@@ -150,5 +128,27 @@ export class AppComponent {
     console.log(new FormattedResult(balance).toNumber());
     pool.selectedTokenBalance = formatUnits(balance, 18);
     this.fetchingBalances = false;
+  }
+
+  private setContractRefs() {
+    this.addressRefs[QUARTZ_TOKEN_ADDRESS_HARMONY] = QuartzToken.connect(
+      this.web3.web3Info.signer
+    );
+    this.addressRefs[QSHARE_TOKEN_ADDRESS_HARMONY] = QShareToken.connect(
+      this.web3.web3Info.signer
+    );
+    this.addressRefs[UST_ADDRESS] = UstToken.connect(this.web3.web3Info.signer);
+
+    this.pairRefs[QUARTZ_QSHARE_DFK_LP_ADDRESS] = QSHARE_QUARTZ_PAIR.connect(
+      this.web3.web3Info.signer
+    );
+
+    this.pairRefs[QUARTZ_UST_DFK_LP_ADDRESS] = QUARTZ_UST_PAIR.connect(
+      this.web3.web3Info.signer
+    );
+
+    this.zapper = new Zapper(this.web3, DFK_ROUTER_HARMONY);
+    this.rewardPool = new RewardPool(this.web3, this.pools);
+    // this.rewardPool.getPendingRewards(this.pools);
   }
 }

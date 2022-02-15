@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { parseUnits } from 'ethers/lib/utils';
 import { Subject } from 'rxjs';
 import { QuickPool } from 'src/app/data/quartz-pools';
 import { FormattedResult } from 'src/lib/utils/formatting';
@@ -7,7 +8,7 @@ import { Web3Service } from '../web3.service';
 const ABI = [
   'function pendingShare(uint256, address)',
   'function deposit(uint256, uint256)',
-  'function wuthdraw(uint256 uint256)',
+  'function withdraw(uint256, uint256)',
 ];
 
 export const REWARD_POOL_ADDRESS_HARMONY =
@@ -44,5 +45,10 @@ export class RewardPool {
       );
       pool.pendingRewards = new FormattedResult(pending);
     }
+  }
+
+  async depositLP(poolId: number, amount: string) {
+    // Listen for event
+    await this.contract.deposit(poolId, parseUnits(amount));
   }
 }

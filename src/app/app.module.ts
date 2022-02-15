@@ -8,12 +8,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConnectWalletButtonComponent } from './components/connect-wallet-button/connect-wallet-button.component';
 import { ZapInComponent } from './components/zap-in/zap-in.component';
 import { ZapOutComponent } from './components/zap-out/zap-out.component';
+import { ZapsContainerComponent } from './components/zaps-container/zaps-container.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import { ZapOutComponent } from './components/zap-out/zap-out.component';
     ConnectWalletButtonComponent,
     ZapInComponent,
     ZapOutComponent,
+    ZapsContainerComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,6 +36,7 @@ import { ZapOutComponent } from './components/zap-out/zap-out.component';
     MatButtonModule,
     MatCardModule,
     MatInputModule,
+    MatTabsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

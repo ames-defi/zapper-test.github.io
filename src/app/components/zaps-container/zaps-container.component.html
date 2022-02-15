@@ -59,7 +59,7 @@
 
             <div class="row" *ngIf="pool.lpTokenBalance">
               <div class="col-md-12">
-                <defi-zap-out [pool]="pool" ></defi-zap-out>
+                <defi-zap-out [pool]="pool" (zapOut)="handleZapOut($event)"></defi-zap-out>
               </div>
             </div>
 

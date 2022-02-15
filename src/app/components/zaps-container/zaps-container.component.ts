@@ -97,12 +97,12 @@ export class ZapsContainerComponent {
       pool.loading = true;
       // Check contract allowance first
       const tokenContract = this.addressRefs[inputTokenAddress];
+      const bnAmount = parseUnits(amount);
       const allowance = await tokenContract.allowance(
         this.web3.web3Info.userAddress,
         ZAP_CONTRACT_MAINNET_ADDRESS
       );
 
-      const bnAmount = parseUnits(amount);
       if (bnAmount.gt(allowance)) {
         pool.loading = true;
         await tokenContract.approve(
@@ -118,7 +118,9 @@ export class ZapsContainerComponent {
     }
   }
 
-  async approveContract(amount: BigNumber) {}
+  async handleZapOut(evt) {
+    console.log(evt);
+  }
 
   async fml(pool) {
     this.fetchingBalances = true;

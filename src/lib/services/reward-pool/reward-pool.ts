@@ -27,15 +27,7 @@ export class RewardPool {
       ABI,
       this.web3.web3Info.signer
     );
-
-    // this.watchRewards(pools);
   }
-
-  // private watchRewards(pools: QuickPool[]) {
-  //   setInterval(async () => {
-  //     this.getPendingRewards(pools)
-  //   }, 10 * 1000);
-  // }
 
   async getPendingRewards(pools: QuickPool[]) {
     for (const pool of pools) {

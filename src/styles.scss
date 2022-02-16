@@ -31,13 +31,14 @@ body {
   button {
     margin-left: 5px;
   }
-
-  mat-form-field {
-    width: 100%;
-  }
 }
 
-.zap-header {
+mat-form-field {
+  width: 100%;
+}
+
+.zap-header,
+.swaps {
   border: 1px solid lightgray;
   border-radius: 5px;
   padding: 5px;

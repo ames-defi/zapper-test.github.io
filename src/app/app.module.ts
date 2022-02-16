@@ -16,6 +16,7 @@ import { ConnectWalletButtonComponent } from './components/connect-wallet-button
 import { ZapInComponent } from './components/zap-in/zap-in.component';
 import { ZapOutComponent } from './components/zap-out/zap-out.component';
 import { ZapsContainerComponent } from './components/zaps-container/zaps-container.component';
+import { TokenSwapComponent } from './components/token-swap/token-swap.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ZapsContainerComponent } from './components/zaps-container/zaps-contain
     ZapInComponent,
     ZapOutComponent,
     ZapsContainerComponent,
+    TokenSwapComponent,
   ],
   imports: [
     BrowserModule,

@@ -42,7 +42,7 @@ export class Web3Service {
     window.ethereum.on('accountsChanged', function (accounts) {
       console.log('Accounts changed:');
       console.log(accounts);
-      // Time to reload your interface with accounts[0]!
+      // Reload UI with accounts[0]
     });
   }
 

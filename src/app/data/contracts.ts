@@ -2,8 +2,14 @@ import { ethers } from 'ethers';
 import { ERC20_ABI } from 'src/lib/abis/erc20-abi';
 import { UNIV2_PAIR_ABI } from 'src/lib/abis/UniV2Pair';
 
+// export const ZAP_CONTRACT_MAINNET_ADDRESS =
+//   '0x0Cc23b51B3A89728c85a63c819E8283e353FC86c';
+
+// export const ZAP_CONTRACT_MAINNET_ADDRESS =
+//   '0xCD0e8bF5ccfF936b6aff1C4C539cc8a03Cf43279';
+
 export const ZAP_CONTRACT_MAINNET_ADDRESS =
-  '0x0Cc23b51B3A89728c85a63c819E8283e353FC86c';
+  '0x0b4C72fe9aafaFdB7c9675B41b6D3F6Fa44C0004';
 
 // QUARTZ.DEFI
 export const QSHARE_TOKEN_ADDRESS_HARMONY =
@@ -43,7 +49,7 @@ export const QUARTZ_QSHARE_DFK_LP_ADDRESS =
 export const DFK_ROUTER_HARMONY = '0x24ad62502d1c652cc7684081169d04896ac20f30';
 export const HARMONY_wONE_ADDRESS =
   '0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a';
-
+export const JEWEL_ADDRESS = '0x72Cb10C6bfA5624dD07Ef608027E366bd690048F';
 export const UST_ADDRESS = '0x224e64ec1BDce3870a6a6c777eDd450454068FEC';
 
 export let QuartzToken = new ethers.Contract(

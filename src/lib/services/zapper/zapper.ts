@@ -18,18 +18,32 @@ export class Zapper {
   }
 
   async zapIn(tokenIn: string, pairAddress: string, amount: BigNumber) {
-    const tx = await this.contract.zapInWithRouter(
-      tokenIn,
-      pairAddress,
-      amount,
-      this.routerAddress
-    );
-
-    console.log(tx);
     try {
+      const tx = await this.contract.zapIn(
+        tokenIn,
+        pairAddress,
+        amount,
+        this.routerAddress
+      );
+
+      console.log(tx);
     } catch (error) {
-      console.error('Zap in jacked');
-      console.error(error);
+      console.log(error);
+    }
+  }
+
+  async zapOut(pairAddress: string, tokenOut: string, amount: BigNumber) {
+    try {
+      const tx = await this.contract.zapOut(
+        pairAddress,
+        tokenOut,
+        this.routerAddress,
+        amount
+      );
+
+      console.log(tx);
+    } catch (error) {
+      console.log(error);
     }
   }
 }

@@ -1,4 +1,9 @@
-import { ContractReceipt, ContractTransaction, ethers } from 'ethers';
+import {
+  BigNumber,
+  ContractReceipt,
+  ContractTransaction,
+  ethers,
+} from 'ethers';
 import { ChainBaseConfig } from '../types/chain.types';
 
 export interface Web3AppInfo {
@@ -54,4 +59,30 @@ export async function awaitTransactionComplete(
   } catch (error) {
     throw error; // Throw and try to let this be handled back in the call stack as needed
   }
+}
+
+export async function giveContactApproval(
+  tokenToContract: ethers.Contract,
+  spender: string,
+  amount: BigNumber,
+  watchAddress: string
+) {
+  console.log('Awaiting approval..');
+  return new Promise((resolve, reject) => {
+    const callback = (approver, approved, amount) => {
+      try {
+        if (approver == watchAddress) {
+          console.log('Approval received!');
+          // Clean up reference
+          tokenToContract.off('Approval', callback);
+          resolve(null);
+        }
+      } catch (error) {
+        reject(error);
+      }
+    };
+
+    tokenToContract.on('Approval', callback);
+    tokenToContract.approve(spender, amount);
+  });
 }

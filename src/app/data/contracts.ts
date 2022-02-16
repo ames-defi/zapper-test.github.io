@@ -2,12 +2,14 @@ import { ethers } from 'ethers';
 import { ERC20_ABI } from 'src/lib/abis/erc20-abi';
 import { UNIV2_PAIR_ABI } from 'src/lib/abis/UniV2Pair';
 
-export const ZAP_TESTER_MAINNET_ADDRESS =
-  '0x5a08204253DEB627e8C116C44AbDcC9b8dE4D061';
-
 // export const ZAP_CONTRACT_MAINNET_ADDRESS =
 //   '0x0Cc23b51B3A89728c85a63c819E8283e353FC86c';
-export const ZAP_CONTRACT_MAINNET_ADDRESS = ZAP_TESTER_MAINNET_ADDRESS;
+
+// export const ZAP_CONTRACT_MAINNET_ADDRESS =
+//   '0xCD0e8bF5ccfF936b6aff1C4C539cc8a03Cf43279';
+
+export const ZAP_CONTRACT_MAINNET_ADDRESS =
+  '0x0b4C72fe9aafaFdB7c9675B41b6D3F6Fa44C0004';
 
 // QUARTZ.DEFI
 export const QSHARE_TOKEN_ADDRESS_HARMONY =

@@ -69,19 +69,6 @@ export const ZAPPER_ABI = [
     type: 'event',
   },
   {
-    inputs: [],
-    name: 'WETH',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -104,7 +91,13 @@ export const ZAPPER_ABI = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
-
+  {
+    inputs: [],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
   {
     inputs: [],
     name: 'owner',
@@ -118,7 +111,26 @@ export const ZAPPER_ABI = [
     stateMutability: 'view',
     type: 'function',
   },
-
+  {
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
   {
     inputs: [
       {
@@ -138,52 +150,6 @@ export const ZAPPER_ABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'uniRouterV2',
-    outputs: [
-      {
-        internalType: 'contract IUniswapV2Router02',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_tokenInAddress',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_pairAddress',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '_tokenInAmount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: '_routerAddress',
-        type: 'address',
-      },
-      {
-        internalType: 'address[]',
-        name: '_path',
-        type: 'address[]',
-      },
-    ],
-    name: 'zapInWithPath',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -206,7 +172,7 @@ export const ZAPPER_ABI = [
         type: 'address',
       },
     ],
-    name: 'zapInWithRouter',
+    name: 'zapIn',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

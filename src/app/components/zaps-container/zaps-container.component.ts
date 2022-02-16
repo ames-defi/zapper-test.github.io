@@ -20,6 +20,8 @@ import { RewardPool } from 'src/lib/services/reward-pool/reward-pool';
 import { Web3Service } from 'src/lib/services/web3.service';
 import { Zapper } from 'src/lib/services/zapper/zapper';
 import { FormattedResult } from 'src/lib/utils/formatting';
+import { giveContactApproval } from 'src/lib/utils/web3-utils';
+import { ZapOutParams } from '../zap-out/zap-out.component';
 
 @Component({
   selector: 'defi-zaps-container',
@@ -57,17 +59,20 @@ export class ZapsContainerComponent {
   private setEventListeners() {
     this.zapper.contract.on('ZappedInLP', (who, pairAddress, lpAmount) => {
       console.log('ZappedInLP Event');
-      console.log(who);
-      console.log(pairAddress);
-      console.log(lpAmount);
+      window.location.reload();
       // this.getLpBalance(pairAddress);
-      console.log(this.web3.web3Info.userAddress);
-      if (who == this.web3.web3Info.userAddress) {
-        console.log(who);
-        console.log(pairAddress);
-        console.log(lpAmount);
-        this.getLpBalance(pairAddress);
-      }
+      // if (this.web3.web3Info.userAddress.includes(who)) {
+      //   this.getLpBalance(pairAddress);
+      // }
+    });
+
+    this.zapper.contract.on('ZappedOutLP', (who, pairAddress, lpAmount) => {
+      console.log('ZappedOutLP Event');
+      window.location.reload();
+      // this.getLpBalance(pairAddress);
+      // if (this.web3.web3Info.userAddress.includes(who)) {
+      //   this.getLpBalance(pairAddress);
+      // }
     });
   }
 
@@ -95,34 +100,85 @@ export class ZapsContainerComponent {
     try {
       const pool = this.pools.find((p) => p.lpAddress == lpAddress);
       pool.loading = true;
-      // Check contract allowance first
-      const tokenContract = this.addressRefs[inputTokenAddress];
-      const bnAmount = parseUnits(amount);
-      const allowance = await tokenContract.allowance(
-        this.web3.web3Info.userAddress,
-        ZAP_CONTRACT_MAINNET_ADDRESS
+
+      await this.checkApprovals(inputTokenAddress, lpAddress, amount);
+
+      await this.zapper.zapIn(
+        inputTokenAddress,
+        lpAddress,
+        parseUnits(amount, 18)
       );
-
-      if (bnAmount.gt(allowance)) {
-        pool.loading = true;
-        await tokenContract.approve(
-          ZAP_CONTRACT_MAINNET_ADDRESS,
-          ethers.constants.MaxUint256
-        );
-      }
-
-      await this.zapper.zapIn(inputTokenAddress, lpAddress, bnAmount);
       pool.loading = false;
     } catch (error) {
       console.error(error);
     }
   }
 
-  async handleZapOut(evt) {
-    console.log(evt);
+  async handleZapOut(data: ZapOutParams) {
+    console.log(data);
+    // Need to make sure user has approved contract for pair and both tokens
+    // The router also needs approvals
+    data.pool.loading = true;
+    await this.zapper.zapOut(
+      data.lpAddress,
+      data.outputTokenAddress,
+      parseUnits(data.pool.lpTokenBalance, 18)
+    );
+    data.pool.loading = false;
   }
 
-  async fml(pool) {
+  async checkApprovals(
+    inputTokenAddress: string,
+    lpAddress: string,
+    amount: string
+  ) {
+    const bnAmount = parseUnits(amount, 18);
+
+    // Check contract allowance first
+    const tokenContract = this.addressRefs[inputTokenAddress];
+    const pairContract = new ethers.Contract(
+      lpAddress,
+      [
+        'function allowance(address, address) public view returns (uint256)',
+        'function approve(address, uint256) public',
+        'event Approval(address, address, uint256)',
+      ],
+      this.web3.web3Info.signer
+    );
+
+    const [inputTokenAllowance, pairAllowance] = await Promise.all([
+      tokenContract.allowance(
+        this.web3.web3Info.userAddress,
+        ZAP_CONTRACT_MAINNET_ADDRESS
+      ),
+      pairContract.allowance(
+        this.web3.web3Info.userAddress,
+        ZAP_CONTRACT_MAINNET_ADDRESS
+      ),
+    ]);
+
+    if (bnAmount.gt(inputTokenAllowance)) {
+      await giveContactApproval(
+        tokenContract,
+        ZAP_CONTRACT_MAINNET_ADDRESS,
+        bnAmount,
+        this.web3.web3Info.userAddress
+      );
+    }
+
+    if (bnAmount.gt(pairAllowance)) {
+      await giveContactApproval(
+        pairContract,
+        ZAP_CONTRACT_MAINNET_ADDRESS,
+        bnAmount,
+        this.web3.web3Info.userAddress
+      );
+
+      window.location.reload();
+    }
+  }
+
+  async getBalances(pool) {
     this.fetchingBalances = true;
     const balance = await this.addressRefs[pool.selectedToken].balanceOf(
       this.web3.web3Info.userAddress

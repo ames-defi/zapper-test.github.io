@@ -15,7 +15,7 @@ import {
   QUARTZ_UST_PAIR,
   DFK_ROUTER_HARMONY,
 } from 'src/app/data/contracts';
-import { QUARTZ_POOLS } from 'src/app/data/quartz-pools';
+import { QUARTZ_POOLS, QuickPool } from 'src/app/data/quartz-pools';
 import { RewardPool } from 'src/lib/services/reward-pool/reward-pool';
 import { Web3Service } from 'src/lib/services/web3.service';
 import { Zapper } from 'src/lib/services/zapper/zapper';
@@ -57,22 +57,17 @@ export class ZapsContainerComponent {
   }
 
   private setEventListeners() {
+    function reset() {
+      window.location.reload();
+    }
     this.zapper.contract.on('ZappedInLP', (who, pairAddress, lpAmount) => {
       console.log('ZappedInLP Event');
-      window.location.reload();
-      // this.getLpBalance(pairAddress);
-      // if (this.web3.web3Info.userAddress.includes(who)) {
-      //   this.getLpBalance(pairAddress);
-      // }
+      reset();
     });
 
     this.zapper.contract.on('ZappedOutLP', (who, pairAddress, lpAmount) => {
       console.log('ZappedOutLP Event');
-      window.location.reload();
-      // this.getLpBalance(pairAddress);
-      // if (this.web3.web3Info.userAddress.includes(who)) {
-      //   this.getLpBalance(pairAddress);
-      // }
+      reset();
     });
   }
 
@@ -108,7 +103,6 @@ export class ZapsContainerComponent {
         lpAddress,
         parseUnits(amount, 18)
       );
-      pool.loading = false;
     } catch (error) {
       console.error(error);
     }
@@ -124,7 +118,6 @@ export class ZapsContainerComponent {
       data.outputTokenAddress,
       parseUnits(data.pool.lpTokenBalance, 18)
     );
-    data.pool.loading = false;
   }
 
   async checkApprovals(
@@ -164,6 +157,8 @@ export class ZapsContainerComponent {
         bnAmount,
         this.web3.web3Info.userAddress
       );
+
+      window.location.reload();
     }
 
     if (bnAmount.gt(pairAllowance)) {

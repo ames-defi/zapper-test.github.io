@@ -24,8 +24,7 @@
       <span class="float-right">
         <button mat-raised-button
           color="primary" [disabled]="!daZapper.value || fetchingBalances || pool.loading"
-          (click)="emitZapOut(daZapper.value);
-          daZapper.value = null">
+          (click)="emitZapOut(daZapper.value); daZapper.value = null">
           Zap Out
         </button>
       </span>

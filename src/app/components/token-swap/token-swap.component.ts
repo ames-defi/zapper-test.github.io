@@ -15,6 +15,7 @@ export class TokenSwapComponent implements OnInit {
   constructor(public readonly web3: Web3Service) {
     this.dex = new DexService(DFK_ROUTER_HARMONY, web3);
     this.dex.swapPaths.subscribe((paths) => {
+      console.log(paths);
       this.pathResults = paths;
     });
   }

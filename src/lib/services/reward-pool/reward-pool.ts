@@ -3,6 +3,7 @@ import { parseUnits } from 'ethers/lib/utils';
 import { Subject } from 'rxjs';
 import { QuickPool } from 'src/app/data/quartz-pools';
 import { FormattedResult } from 'src/lib/utils/formatting';
+import { awaitTransactionComplete } from 'src/lib/utils/web3-utils';
 import { Web3Service } from '../web3.service';
 
 const ABI = [
@@ -41,6 +42,8 @@ export class RewardPool {
 
   async depositLP(poolId: number, amount: string) {
     // Listen for event
-    await this.contract.deposit(poolId, parseUnits(amount));
+    const tx = await this.contract.deposit(poolId, parseUnits(amount));
+    await awaitTransactionComplete(tx);
+    window.location.reload();
   }
 }

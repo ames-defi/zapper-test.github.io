@@ -86,6 +86,8 @@ export class DexService {
     this.swapAmount = parseUnits(amount, 18);
     if (this.swapAmount && this.swapInfo[0] && this.swapInfo[1]) {
       this.setSwapInfo();
+    } else {
+      console.log('Need more swap info..');
     }
   }
 

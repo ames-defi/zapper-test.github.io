@@ -14,6 +14,8 @@ import {
   QUARTZ_UST_PAIR,
   UsdcToken,
   USDC_ADDRESS,
+  JEWEL_ADDRESS,
+  JewelToken,
 } from 'src/app/data/contracts';
 import { FormattedResult } from 'src/lib/utils/formatting';
 import { Web3Service } from '../web3.service';
@@ -50,6 +52,14 @@ export class TokenService {
     this.contractRefs[USDC_ADDRESS] = UsdcToken.connect(
       this.web3.web3Info.signer
     );
+    this.contractRefs[USDC_ADDRESS] = UsdcToken.connect(
+      this.web3.web3Info.signer
+    );
+
+    this.contractRefs[JEWEL_ADDRESS] = JewelToken.connect(
+      this.web3.web3Info.signer
+    );
+
     this.setPairRefs();
   }
 

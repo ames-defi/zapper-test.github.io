@@ -8,27 +8,27 @@ import {
   USDC_ADDRESS,
 } from './contracts';
 
-const QUARTZ = {
+export const QUARTZ = {
   name: 'Quartz',
   address: QUARTZ_TOKEN_ADDRESS_HARMONY,
 };
 
-const QSHARE = {
+export const QSHARE = {
   name: 'QShare',
   address: QSHARE_TOKEN_ADDRESS_HARMONY,
 };
 
-const UST = {
+export const UST = {
   name: 'UST',
   address: UST_ADDRESS,
 };
 
-const JEWEL = {
+export const JEWEL = {
   name: 'Jewel',
   address: JEWEL_ADDRESS,
 };
 
-const WONE = {
+export const WONE = {
   name: 'WONE',
   address: HARMONY_wONE_ADDRESS,
 };

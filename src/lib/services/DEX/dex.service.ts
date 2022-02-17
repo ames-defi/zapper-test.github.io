@@ -1,13 +1,22 @@
 import { Injectable } from '@angular/core';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { formatEther, parseUnits } from 'ethers/lib/utils';
 import { Subject } from 'rxjs';
 import { DFK_ROUTER_HARMONY } from 'src/app/data/contracts';
 import { DFK_QUARTZ_ROUTES, TOKEN_LIST } from 'src/app/data/routes';
+import { FormattedResult } from 'src/lib/utils/formatting';
+import { awaitTransactionComplete } from 'src/lib/utils/web3-utils';
 import { Web3Service } from '../web3.service';
 
 const ROUTER_ABI = [
-  'function getAmountsOut(uint, address[]) public view returns (uint[] memory amounts)',
+  'function getAmountsOut(uint, address[]) public view returns (uint[] memory)',
+  `function swapExactTokensForTokens(
+    uint,
+    uint,
+    address[],
+    address,
+    uint
+  ) external returns (uint[] memory)`,
 ];
 
 export interface BasicToken {
@@ -32,11 +41,17 @@ export class DexService {
     return this._swapPaths.asObservable();
   }
 
+  private _swapComplete = new Subject<boolean>();
+  get swapComplete() {
+    return this._swapComplete.asObservable();
+  }
+
   reset = new Subject<boolean>();
   loading = new Subject<boolean>();
 
   private swapInfo: BasicToken[] = [];
   private swapAmount = null;
+
   currentPathResults = {};
 
   readonly tokenList = TOKEN_LIST;
@@ -90,17 +105,13 @@ export class DexService {
 
   async startQuote(amount: string, decimals: number) {
     this.swapAmount = parseUnits(amount, decimals);
-    if (this.swapAmount && this.swapInfo[0] && this.swapInfo[1]) {
+    if (this.isCurrentSwapValid()) {
       this.setSwapInfo();
-    } else {
-      console.log('Need more swap info..');
     }
   }
 
   async quotePath(amount, path: string[]) {
-    const amounts = await this.router.getAmountsOut(amount, path);
-    console.log(amounts);
-    return amounts;
+    return await this.router.getAmountsOut(amount, path);
   }
 
   getInputTokenPaths(token0: string, token1: string) {
@@ -109,12 +120,51 @@ export class DexService {
       .filter((path) => path[path.length - 1].address == token1);
   }
 
+  async executeCurrentSwap(path: string[]) {
+    if (this.isCurrentSwapValid()) {
+      this._executeCurrentSwap(path);
+    }
+  }
+
+  private async _executeCurrentSwap(path: string[]) {
+    try {
+      console.log('Starting swap..');
+      console.log(this.swapAmount);
+      console.log(path);
+      console.log(this.web3.web3Info.userAddress);
+      const DEFAULT_DEADLINE_MINUTES = 5;
+      const tx = await this.router.swapExactTokensForTokens(
+        this.swapAmount,
+        ethers.constants.Zero,
+        path,
+        this.web3.web3Info.userAddress,
+        Math.floor(Date.now() / 1000) + 60 * DEFAULT_DEADLINE_MINUTES
+      );
+      console.log(tx);
+      await awaitTransactionComplete(tx);
+
+      this._swapComplete.next(true);
+      this.resetSwap();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  isCurrentSwapValid() {
+    const valid = this.swapAmount && this.swapInfo[0] && this.swapInfo[1];
+    if (!valid) {
+      console.log('Need more swap info..');
+    }
+    return valid;
+  }
+
   resetSwap() {
     this.tokenList0 = this.tokenList.slice();
     this.tokenList1 = this.tokenList.slice();
     this.swapInfo[0] = null;
     this.swapInfo[1] = null;
     this.swapAmount = null;
+    this.currentPathResults = {};
     this._swapPaths.next([]);
     this.reset.next(true);
   }

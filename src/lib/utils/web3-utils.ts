@@ -40,14 +40,14 @@ export async function getWeb3(
 
 export async function awaitTransactionComplete(
   txResponse: ContractTransaction,
-  confirmations?: number
+  confirmations = 1
 ): Promise<ContractReceipt> {
   try {
     console.log(`- Starting transaction: ${txResponse.hash}`);
     console.log(
       `- Awaiting transaction receipt... - ` + new Date().toLocaleString()
     );
-    const txReceipt = await txResponse.wait();
+    const txReceipt = await txResponse.wait(confirmations);
     console.log(
       '- TransactionReceipt received - ' + new Date().toLocaleString()
     );

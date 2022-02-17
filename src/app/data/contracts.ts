@@ -63,6 +63,7 @@ export let QShareToken = new ethers.Contract(
 );
 export let UstToken = new ethers.Contract(UST_ADDRESS, ERC20_ABI);
 export let UsdcToken = new ethers.Contract(USDC_ADDRESS, ERC20_ABI);
+export let JewelToken = new ethers.Contract(JEWEL_ADDRESS, ERC20_ABI);
 
 export const QUARTZ_UST_PAIR = new ethers.Contract(
   QUARTZ_UST_DFK_LP_ADDRESS,

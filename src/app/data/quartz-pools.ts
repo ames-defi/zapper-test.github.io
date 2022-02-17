@@ -22,7 +22,7 @@ export interface QuickPool {
     address: string;
   };
   selectedToken?: string;
-  selectedTokenBalance?: number;
+  selectedTokenBalance?: string;
   lpTokenBalance?: string;
   loading?: boolean;
 

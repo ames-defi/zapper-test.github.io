@@ -1,8 +1,9 @@
+import { Injectable } from '@angular/core';
 import { ethers } from 'ethers';
-import { formatEther, formatUnits, parseUnits } from 'ethers/lib/utils';
+import { formatEther, parseUnits } from 'ethers/lib/utils';
 import { Subject } from 'rxjs';
+import { DFK_ROUTER_HARMONY } from 'src/app/data/contracts';
 import { DFK_QUARTZ_ROUTES, TOKEN_LIST } from 'src/app/data/routes';
-import { FormattedResult } from 'src/lib/utils/formatting';
 import { Web3Service } from '../web3.service';
 
 const ROUTER_ABI = [
@@ -14,8 +15,9 @@ export interface BasicToken {
   name: string;
 }
 
+@Injectable({ providedIn: 'root' })
 export class DexService {
-  readonly router: ethers.Contract;
+  private router: ethers.Contract;
 
   private _swapState = new Subject<{
     token0: BasicToken;
@@ -41,11 +43,15 @@ export class DexService {
   tokenList0 = [...this.tokenList];
   tokenList1 = [...this.tokenList];
 
-  constructor(uniRouterAddress, private readonly web3: Web3Service) {
+  constructor(private readonly web3: Web3Service) {
+    this.setRouter(DFK_ROUTER_HARMONY);
+  }
+
+  setRouter(address: string) {
     this.router = new ethers.Contract(
-      uniRouterAddress,
+      address,
       ROUTER_ABI,
-      web3.web3Info.signer
+      this.web3.web3Info.signer
     );
   }
 

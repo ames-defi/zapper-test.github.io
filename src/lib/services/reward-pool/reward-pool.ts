@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { ethers } from 'ethers';
 import { parseUnits } from 'ethers/lib/utils';
 import { Subject } from 'rxjs';
@@ -15,6 +16,7 @@ const ABI = [
 export const REWARD_POOL_ADDRESS_HARMONY =
   '0x1da194F8baf85175519D92322a06b46A2638A530';
 
+@Injectable({ providedIn: 'root' })
 export class RewardPool {
   public readonly contract: ethers.Contract;
   private _pendingRewards = new Subject<FormattedResult>();
@@ -22,7 +24,7 @@ export class RewardPool {
     return this._pendingRewards.asObservable();
   }
 
-  constructor(private web3: Web3Service, pools: QuickPool[]) {
+  constructor(private web3: Web3Service) {
     this.contract = new ethers.Contract(
       REWARD_POOL_ADDRESS_HARMONY,
       ABI,

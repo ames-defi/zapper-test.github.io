@@ -10,18 +10,20 @@ import { Web3Service } from 'src/lib/services/web3.service';
   styleUrls: ['./token-swap.component.scss'],
 })
 export class TokenSwapComponent {
-  dex: DexService;
   pathResults = [];
 
-  constructor(public readonly web3: Web3Service) {
-    this.dex = new DexService(DFK_ROUTER_HARMONY, web3);
+  constructor(
+    public readonly web3: Web3Service,
+    public readonly dex: DexService
+  ) {
+    this.dex = new DexService(web3);
     this.dex.swapPaths.subscribe((paths) => {
       console.log(paths);
       this.pathResults = paths;
     });
   }
 
-  setSwap(token0: BasicToken, token1: BasicToken, inputAmount) {
+  setSwap(token0: BasicToken, inputAmount) {
     this.dex.startQuote(inputAmount, token0.address === USDC.address ? 6 : 18);
   }
 }

@@ -51,6 +51,7 @@ export const HARMONY_wONE_ADDRESS =
   '0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a';
 export const JEWEL_ADDRESS = '0x72Cb10C6bfA5624dD07Ef608027E366bd690048F';
 export const UST_ADDRESS = '0x224e64ec1BDce3870a6a6c777eDd450454068FEC';
+export const USDC_ADDRESS = '0x985458E523dB3d53125813eD68c274899e9DfAb4';
 
 export let QuartzToken = new ethers.Contract(
   QUARTZ_TOKEN_ADDRESS_HARMONY,
@@ -61,6 +62,7 @@ export let QShareToken = new ethers.Contract(
   ERC20_ABI
 );
 export let UstToken = new ethers.Contract(UST_ADDRESS, ERC20_ABI);
+export let UsdcToken = new ethers.Contract(USDC_ADDRESS, ERC20_ABI);
 
 export const QUARTZ_UST_PAIR = new ethers.Contract(
   QUARTZ_UST_DFK_LP_ADDRESS,

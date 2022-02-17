@@ -1,22 +1,13 @@
 import { Component } from '@angular/core';
-import { ethers, BigNumber } from 'ethers';
+import { ethers } from 'ethers';
 import { formatUnits, parseUnits } from 'ethers/lib/utils';
 import {
   ZAP_CONTRACT_MAINNET_ADDRESS,
-  QUARTZ_TOKEN_ADDRESS_HARMONY,
-  QuartzToken,
-  QSHARE_TOKEN_ADDRESS_HARMONY,
-  QShareToken,
-  UST_ADDRESS,
-  UstToken,
-  QUARTZ_QSHARE_DFK_LP_ADDRESS,
-  QSHARE_QUARTZ_PAIR,
-  QUARTZ_UST_DFK_LP_ADDRESS,
-  QUARTZ_UST_PAIR,
   DFK_ROUTER_HARMONY,
 } from 'src/app/data/contracts';
 import { QUARTZ_POOLS, QuickPool } from 'src/app/data/quartz-pools';
 import { RewardPool } from 'src/lib/services/reward-pool/reward-pool';
+import { TokenService } from 'src/lib/services/tokens/token.service';
 import { Web3Service } from 'src/lib/services/web3.service';
 import { Zapper } from 'src/lib/services/zapper/zapper';
 import { FormattedResult } from 'src/lib/utils/formatting';
@@ -30,16 +21,18 @@ import { ZapOutParams } from '../zap-out/zap-out.component';
 })
 export class ZapsContainerComponent {
   private zapper: Zapper;
-  public rewardPool: RewardPool;
   pools = QUARTZ_POOLS;
   fetchingBalances = false;
-  addressRefs: any = {};
-  pairRefs: any = {};
 
-  constructor(public readonly web3: Web3Service) {
+  constructor(
+    public readonly web3: Web3Service,
+    public readonly rewardPool: RewardPool,
+    public readonly tokens: TokenService
+  ) {
+    this.zapper = new Zapper(this.web3, DFK_ROUTER_HARMONY);
+
     this.web3.ready.subscribe((ready) => {
       if (ready) {
-        this.setContractRefs();
         this.setEventListeners();
         this.checkLPs();
       }
@@ -48,6 +41,13 @@ export class ZapsContainerComponent {
     this.web3.error.subscribe((err) => {
       console.log(err);
     });
+  }
+
+  async getUserBalanceForPool(pool: QuickPool) {
+    this.fetchingBalances = true;
+    const balance = await this.tokens.getUserTokenBalance(pool.selectedToken);
+    pool.selectedTokenBalance = balance.formatUnits(18);
+    this.fetchingBalances = false;
   }
 
   private async checkLPs() {
@@ -74,12 +74,10 @@ export class ZapsContainerComponent {
 
     pool.selectedToken = null;
     pool.selectedTokenBalance = null;
-    const lpTokenBalance = await this.pairRefs[lpAddress].balanceOf(
-      this.web3.web3Info.userAddress
-    );
-    pool.lpTokenBalance = lpTokenBalance.isZero()
+    const lpTokenBalance = await this.tokens.getUserTokenBalance(lpAddress);
+    pool.lpTokenBalance = lpTokenBalance.value.isZero()
       ? null
-      : formatUnits(lpTokenBalance, 18);
+      : lpTokenBalance.formatUnits(18);
     console.log(pool.lpTokenBalance);
     pool.loading = false;
   }
@@ -125,7 +123,7 @@ export class ZapsContainerComponent {
     const bnAmount = parseUnits(amount, 18);
 
     // Check contract allowance first
-    const tokenContract = this.addressRefs[inputTokenAddress];
+    const tokenContract = this.tokens.getTokenContract(inputTokenAddress);
     const pairContract = new ethers.Contract(
       lpAddress,
       [
@@ -168,37 +166,5 @@ export class ZapsContainerComponent {
 
       window.location.reload();
     }
-  }
-
-  async getBalances(pool) {
-    this.fetchingBalances = true;
-    const balance = await this.addressRefs[pool.selectedToken].balanceOf(
-      this.web3.web3Info.userAddress
-    );
-    console.log(new FormattedResult(balance).toNumber());
-    pool.selectedTokenBalance = formatUnits(balance, 18);
-    this.fetchingBalances = false;
-  }
-
-  private setContractRefs() {
-    this.addressRefs[QUARTZ_TOKEN_ADDRESS_HARMONY] = QuartzToken.connect(
-      this.web3.web3Info.signer
-    );
-    this.addressRefs[QSHARE_TOKEN_ADDRESS_HARMONY] = QShareToken.connect(
-      this.web3.web3Info.signer
-    );
-    this.addressRefs[UST_ADDRESS] = UstToken.connect(this.web3.web3Info.signer);
-
-    this.pairRefs[QUARTZ_QSHARE_DFK_LP_ADDRESS] = QSHARE_QUARTZ_PAIR.connect(
-      this.web3.web3Info.signer
-    );
-
-    this.pairRefs[QUARTZ_UST_DFK_LP_ADDRESS] = QUARTZ_UST_PAIR.connect(
-      this.web3.web3Info.signer
-    );
-
-    this.zapper = new Zapper(this.web3, DFK_ROUTER_HARMONY);
-    this.rewardPool = new RewardPool(this.web3, this.pools);
-    // this.rewardPool.getPendingRewards(this.pools);
   }
 }

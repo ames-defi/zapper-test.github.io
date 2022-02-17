@@ -5,6 +5,7 @@ import {
   UST_ADDRESS,
   HARMONY_wONE_ADDRESS,
   JEWEL_ADDRESS,
+  USDC_ADDRESS,
 } from './contracts';
 
 const QUARTZ = {
@@ -34,7 +35,7 @@ const WONE = {
 
 export const USDC = {
   name: 'USDC',
-  address: '0x985458E523dB3d53125813eD68c274899e9DfAb4',
+  address: USDC_ADDRESS,
 };
 
 export const TOKEN_LIST = [QUARTZ, QSHARE, JEWEL, UST, USDC];

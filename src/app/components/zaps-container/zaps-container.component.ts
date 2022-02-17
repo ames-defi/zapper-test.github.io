@@ -165,12 +165,12 @@ export class ZapsContainerComponent {
     }
 
     if (bnAmount.gt(pairAllowance)) {
-      await giveContactApproval(
-        pairContract,
-        ZAP_CONTRACT_MAINNET_ADDRESS,
-        bnAmount,
-        this.web3.web3Info.userAddress
-      );
+      // await giveContactApproval(
+      //   pairContract,
+      //   ZAP_CONTRACT_MAINNET_ADDRESS,
+      //   bnAmount,
+      //   this.web3.web3Info.userAddress
+      // );
       const tx = await pairContract.approve(
         ZAP_CONTRACT_MAINNET_ADDRESS,
         bnAmount

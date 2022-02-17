@@ -37,7 +37,7 @@ const USDC = {
   address: '0x985458E523dB3d53125813eD68c274899e9DfAb4',
 };
 
-export const TOKEN_LIST = [UST, USDC, QUARTZ, QSHARE, JEWEL];
+export const TOKEN_LIST = [QUARTZ, QSHARE, JEWEL, UST, USDC];
 
 export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
   {
@@ -82,6 +82,21 @@ export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
   },
   {
     [QSHARE.address]: {
+      path: [QSHARE, UST, JEWEL],
+    },
+  },
+  {
+    [QSHARE.address]: {
+      path: [QSHARE, WONE, JEWEL],
+    },
+  },
+  {
+    [QSHARE.address]: {
+      path: [QSHARE, QUARTZ, UST, JEWEL],
+    },
+  },
+  {
+    [QSHARE.address]: {
       path: [QSHARE, QUARTZ],
     },
   },
@@ -105,6 +120,8 @@ export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
       path: [QUARTZ, WONE, JEWEL, UST],
     },
   },
+
+  // UST -> QUARTZ
   {
     [UST.address]: {
       path: [UST, QUARTZ],
@@ -115,5 +132,50 @@ export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
       path: [UST, JEWEL, WONE, QSHARE, QUARTZ],
     },
   },
-  { [UST.address]: { path: [UST, JEWEL, WONE, QSHARE, QUARTZ] } },
+  {
+    [UST.address]: {
+      path: [UST, JEWEL, WONE, QSHARE, QUARTZ],
+    },
+  },
+
+  // UST -> QSHARE
+  {
+    [UST.address]: {
+      path: [UST, JEWEL, WONE, QSHARE],
+    },
+  },
+  {
+    [UST.address]: {
+      path: [UST, QUARTZ, QSHARE],
+    },
+  },
+  {
+    [UST.address]: {
+      path: [UST, QUARTZ, WONE, QSHARE],
+    },
+  },
+
+  // JEWEL -> QUARTZ
+  {
+    [JEWEL.address]: {
+      path: [JEWEL, UST, QUARTZ],
+    },
+  },
+  {
+    [JEWEL.address]: {
+      path: [JEWEL, WONE, QSHARE, QUARTZ],
+    },
+  },
+
+  // JEWEL -> QSHARE
+  {
+    [JEWEL.address]: {
+      path: [JEWEL, WONE, QSHARE],
+    },
+  },
+  {
+    [JEWEL.address]: {
+      path: [JEWEL, UST, QUARTZ, QSHARE],
+    },
+  },
 ];

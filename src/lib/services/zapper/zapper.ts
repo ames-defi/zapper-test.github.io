@@ -2,6 +2,7 @@ import { BigNumber, ethers } from 'ethers';
 import { Web3Service } from '../web3.service';
 import { ZAP_CONTRACT_MAINNET_ADDRESS } from '../../../app/data/contracts';
 import { ZAPPER_ABI } from './zapper-abi';
+import { awaitTransactionComplete } from 'src/lib/utils/web3-utils';
 
 export class Zapper {
   public readonly contract: ethers.Contract;
@@ -27,6 +28,7 @@ export class Zapper {
       );
 
       console.log(tx);
+      await awaitTransactionComplete(tx);
     } catch (error) {
       console.log(error);
     }
@@ -42,6 +44,7 @@ export class Zapper {
       );
 
       console.log(tx);
+      await awaitTransactionComplete(tx);
     } catch (error) {
       console.log(error);
     }

@@ -13,7 +13,9 @@ export class TokenSwapComponent {
   pathResults = [];
   swapInfo: BasicToken[] = [];
   userTokenZeroBalance = null;
+  userTokenOneBalance = null;
   currentInToken: BasicToken = null;
+  currentOutToken: BasicToken = null;
   gettingBalance = false;
 
   constructor(
@@ -26,10 +28,7 @@ export class TokenSwapComponent {
       this.pathResults = paths;
     });
 
-    this.dex.swapComplete.subscribe(async (done) => {
-      await this.setUserToken0(this.currentInToken.address);
-      this.currentInToken = null;
-    });
+    this.dex.swapComplete.subscribe(async (done) => {});
   }
 
   startQuote(token0: BasicToken, inputAmount: string) {
@@ -40,17 +39,19 @@ export class TokenSwapComponent {
     this.dex.executeCurrentSwap(path.map((p) => p.address));
   }
 
-  updateToken0(token0: BasicToken) {
+  async updateToken0(token0: BasicToken) {
     this.dex.updateSwap(0, token0);
     this.currentInToken = token0;
-    this.setUserToken0(token0.address);
+    this.userTokenZeroBalance = null;
+    const balance = await this.tokens.getUserTokenBalance(token0.address);
+    this.userTokenZeroBalance = balance.toNumber();
   }
 
-  private async setUserToken0(address: string) {
-    this.userTokenZeroBalance = null;
-    this.gettingBalance = true;
-    const balance = await this.tokens.getUserTokenBalance(address);
-    this.userTokenZeroBalance = balance.toNumber();
-    this.gettingBalance = false;
+  async updateToken1(token1: BasicToken) {
+    this.dex.updateSwap(1, token1);
+    this.currentOutToken = token1;
+    this.userTokenOneBalance = null;
+    const balance = await this.tokens.getUserTokenBalance(token1.address);
+    this.userTokenOneBalance = balance.toNumber();
   }
 }

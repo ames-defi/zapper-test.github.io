@@ -23,9 +23,12 @@
         <div class="col-md-12">
           <mat-form-field appearance="outline">
             <mat-label>Select Token Out</mat-label>
-            <mat-select (selectionChange)="dex.updateSwap(1, $event.value)" #token1>
+            <mat-select (selectionChange)="updateToken1($event.value)" #token1>
               <mat-option *ngFor="let token of dex.tokenList1" [value]="token">{{ token.name }}</mat-option>
             </mat-select>
+            <mat-hint align="end">
+              <strong>Balance: {{ userTokenOneBalance }}</strong>
+            </mat-hint>
           </mat-form-field>
         </div>
 

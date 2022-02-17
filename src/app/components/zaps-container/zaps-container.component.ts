@@ -10,8 +10,10 @@ import { RewardPool } from 'src/lib/services/reward-pool/reward-pool';
 import { TokenService } from 'src/lib/services/tokens/token.service';
 import { Web3Service } from 'src/lib/services/web3.service';
 import { Zapper } from 'src/lib/services/zapper/zapper';
-import { FormattedResult } from 'src/lib/utils/formatting';
-import { giveContactApproval } from 'src/lib/utils/web3-utils';
+import {
+  awaitTransactionComplete,
+  giveContactApproval,
+} from 'src/lib/utils/web3-utils';
 import { ZapOutParams } from '../zap-out/zap-out.component';
 
 @Component({
@@ -98,21 +100,22 @@ export class ZapsContainerComponent {
         lpAddress,
         parseUnits(amount, 18)
       );
+
+      pool.loading = false;
     } catch (error) {
       console.error(error);
     }
   }
 
   async handleZapOut(data: ZapOutParams) {
-    console.log(data);
-    // Need to make sure user has approved contract for pair and both tokens
-    // The router also needs approvals
     data.pool.loading = true;
     await this.zapper.zapOut(
       data.lpAddress,
       data.outputTokenAddress,
       parseUnits(data.pool.lpTokenBalance, 18)
     );
+
+    data.pool.loading = false;
   }
 
   async checkApprovals(
@@ -146,14 +149,19 @@ export class ZapsContainerComponent {
     ]);
 
     if (bnAmount.gt(inputTokenAllowance)) {
-      await giveContactApproval(
-        tokenContract,
-        ZAP_CONTRACT_MAINNET_ADDRESS,
-        bnAmount,
-        this.web3.web3Info.userAddress
-      );
+      // await giveContactApproval(
+      //   tokenContract,
+      //   ZAP_CONTRACT_MAINNET_ADDRESS,
+      //   bnAmount,
+      //   this.web3.web3Info.userAddress
+      // );
 
-      window.location.reload();
+      const tx = await tokenContract.approve(
+        ZAP_CONTRACT_MAINNET_ADDRESS,
+        bnAmount
+      );
+      await awaitTransactionComplete(tx);
+      //window.location.reload();
     }
 
     if (bnAmount.gt(pairAllowance)) {
@@ -163,8 +171,12 @@ export class ZapsContainerComponent {
         bnAmount,
         this.web3.web3Info.userAddress
       );
-
-      window.location.reload();
+      const tx = await pairContract.approve(
+        ZAP_CONTRACT_MAINNET_ADDRESS,
+        bnAmount
+      );
+      await awaitTransactionComplete(tx);
+      // window.location.reload();
     }
   }
 }

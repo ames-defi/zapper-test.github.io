@@ -57,17 +57,14 @@ export class ZapsContainerComponent {
   }
 
   private setEventListeners() {
-    function reset() {
-      window.location.reload();
-    }
     this.zapper.contract.on('ZappedInLP', (who, pairAddress, lpAmount) => {
       console.log('ZappedInLP Event');
-      reset();
+      window.location.reload();
     });
 
     this.zapper.contract.on('ZappedOutLP', (who, pairAddress, lpAmount) => {
       console.log('ZappedOutLP Event');
-      reset();
+      window.location.reload();
     });
   }
 

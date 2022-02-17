@@ -4,16 +4,15 @@ import { formatUnits, parseUnits } from 'ethers/lib/utils';
 import {
   ZAP_CONTRACT_MAINNET_ADDRESS,
   DFK_ROUTER_HARMONY,
+  QUARTZ_UST_DFK_LP_ADDRESS,
 } from 'src/app/data/contracts';
 import { QUARTZ_POOLS, QuickPool } from 'src/app/data/quartz-pools';
+import { QUARTZ, QSHARE, UST } from 'src/app/data/routes';
 import { RewardPool } from 'src/lib/services/reward-pool/reward-pool';
 import { TokenService } from 'src/lib/services/tokens/token.service';
 import { Web3Service } from 'src/lib/services/web3.service';
 import { Zapper } from 'src/lib/services/zapper/zapper';
-import {
-  awaitTransactionComplete,
-  giveContactApproval,
-} from 'src/lib/utils/web3-utils';
+import { awaitTransactionComplete } from 'src/lib/utils/web3-utils';
 import { ZapOutParams } from '../zap-out/zap-out.component';
 
 @Component({
@@ -25,6 +24,7 @@ export class ZapsContainerComponent {
   private zapper: Zapper;
   pools = QUARTZ_POOLS;
   fetchingBalances = false;
+  zapPath = [];
 
   constructor(
     public readonly web3: Web3Service,
@@ -87,7 +87,8 @@ export class ZapsContainerComponent {
   async handleZapIn(
     inputTokenAddress: string,
     lpAddress: string,
-    amount: string
+    amount: string,
+    withPath: boolean
   ) {
     try {
       const pool = this.pools.find((p) => p.lpAddress == lpAddress);
@@ -95,16 +96,41 @@ export class ZapsContainerComponent {
 
       await this.checkApprovals(inputTokenAddress, lpAddress, amount);
 
-      await this.zapper.zapIn(
-        inputTokenAddress,
-        lpAddress,
-        parseUnits(amount, 18)
-      );
+      if (!withPath) {
+        await this.zapper.zapIn(
+          inputTokenAddress,
+          lpAddress,
+          parseUnits(amount, 18)
+        );
+      } else {
+        this.handleZapInWithPath(inputTokenAddress, lpAddress, amount);
+      }
 
       pool.loading = false;
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async handleZapInWithPath(
+    inputTokenAddress: string,
+    lpAddress: string,
+    amount: string
+  ) {
+    // Test zap in with path
+    let path;
+    if (inputTokenAddress == QUARTZ.address) {
+      path = [QUARTZ.address, UST.address];
+    } else {
+      path = [UST.address, QUARTZ.address];
+    }
+
+    await this.zapper.zapInWithPath(
+      inputTokenAddress,
+      lpAddress,
+      parseUnits(amount, 18),
+      path
+    );
   }
 
   async handleZapOut(data: ZapOutParams) {

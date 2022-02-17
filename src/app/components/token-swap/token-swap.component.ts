@@ -28,15 +28,28 @@ export class TokenSwapComponent {
       this.pathResults = paths;
     });
 
-    this.dex.swapComplete.subscribe(async (done) => {});
+    this.dex.swapComplete.subscribe(async (done) => {
+      const bal0 = await this.tokens.getUserTokenBalance(
+        this.currentInToken.address
+      );
+      this.userTokenZeroBalance = bal0.toNumber();
+      const bal1 = await this.tokens.getUserTokenBalance(
+        this.currentOutToken.address
+      );
+      this.userTokenOneBalance = bal1.toNumber();
+      this.currentInToken = null;
+      this.currentOutToken = null;
+    });
   }
 
   startQuote(token0: BasicToken, inputAmount: string) {
     this.dex.startQuote(inputAmount, token0.address === USDC.address ? 6 : 18);
   }
 
-  startSwap(path: BasicToken[]) {
+  async startSwap(path: BasicToken[]) {
+    this.gettingBalance = true;
     this.dex.executeCurrentSwap(path.map((p) => p.address));
+    this.gettingBalance = false;
   }
 
   async updateToken0(token0: BasicToken) {

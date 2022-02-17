@@ -34,6 +34,28 @@ export class Zapper {
     }
   }
 
+  async zapInWithPath(
+    tokenIn: string,
+    pairAddress: string,
+    amount: BigNumber,
+    path: string[]
+  ) {
+    try {
+      const tx = await this.contract.zapInWithPath(
+        tokenIn,
+        pairAddress,
+        amount,
+        this.routerAddress,
+        path
+      );
+
+      console.log(tx);
+      await awaitTransactionComplete(tx);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async zapOut(pairAddress: string, tokenOut: string, amount: BigNumber) {
     try {
       const tx = await this.contract.zapOut(

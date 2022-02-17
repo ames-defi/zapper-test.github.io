@@ -95,6 +95,16 @@ export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
       path: [QUARTZ, QSHARE],
     },
   },
+  {
+    [QUARTZ.address]: {
+      path: [QUARTZ, UST, JEWEL, WONE, QSHARE],
+    },
+  },
+  {
+    [QUARTZ.address]: {
+      path: [QUARTZ, UST, WONE, QSHARE],
+    },
+  },
 
   // QSHARE -> UST
   {

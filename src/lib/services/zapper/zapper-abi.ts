@@ -72,17 +72,17 @@ export const ZAPPER_ABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_token',
+        name: 'token',
         type: 'address',
       },
       {
         internalType: 'address',
-        name: '_receiver',
+        name: 'receiver',
         type: 'address',
       },
       {
         internalType: 'uint256',
-        name: '_amount',
+        name: 'amount',
         type: 'uint256',
       },
     ],
@@ -135,12 +135,12 @@ export const ZAPPER_ABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_tokenAddress',
+        name: 'tokenAddress',
         type: 'address',
       },
       {
         internalType: 'address',
-        name: '_routerAddress',
+        name: 'routerAddress',
         type: 'address',
       },
     ],
@@ -153,22 +153,22 @@ export const ZAPPER_ABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_tokenInAddress',
+        name: 'tokenInAddress',
         type: 'address',
       },
       {
         internalType: 'address',
-        name: '_pairAddress',
+        name: 'pairAddress',
         type: 'address',
       },
       {
         internalType: 'uint256',
-        name: '_tokenInAmount',
+        name: 'tokenInAmount',
         type: 'uint256',
       },
       {
         internalType: 'address',
-        name: '_routerAddress',
+        name: 'routerAddress',
         type: 'address',
       },
     ],
@@ -181,22 +181,61 @@ export const ZAPPER_ABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_pairAddress',
+        name: 'tokenInAddress',
         type: 'address',
       },
       {
         internalType: 'address',
-        name: '_desiredTokenOut',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_routerAddress',
+        name: 'pairAddress',
         type: 'address',
       },
       {
         internalType: 'uint256',
-        name: '_withdrawAmount',
+        name: 'tokenInAmount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'routerAddress',
+        type: 'address',
+      },
+      {
+        internalType: 'address[]',
+        name: 'path',
+        type: 'address[]',
+      },
+    ],
+    name: 'zapInWithPath',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'pairAddress',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'desiredTokenOut',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'routerAddress',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'withdrawAmount',
         type: 'uint256',
       },
     ],

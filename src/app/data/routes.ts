@@ -32,7 +32,7 @@ const WONE = {
   address: HARMONY_wONE_ADDRESS,
 };
 
-const USDC = {
+export const USDC = {
   name: 'USDC',
   address: '0x985458E523dB3d53125813eD68c274899e9DfAb4',
 };
@@ -40,6 +40,7 @@ const USDC = {
 export const TOKEN_LIST = [QUARTZ, QSHARE, JEWEL, UST, USDC];
 
 export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
+  // USDC -> QUARTZ
   {
     [USDC.address]: {
       path: [USDC, UST, JEWEL, WONE, QSHARE, QUARTZ],
@@ -55,6 +56,20 @@ export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
       path: [USDC, WONE, QSHARE, QUARTZ],
     },
   },
+
+  // USDC -> QSHARE
+  {
+    [USDC.address]: {
+      path: [USDC, WONE, QSHARE],
+    },
+  },
+  {
+    [USDC.address]: {
+      path: [USDC, JEWEL, WONE, QSHARE],
+    },
+  },
+
+  // QUARTZ -> UST
   {
     [QUARTZ.address]: {
       path: [QUARTZ, UST],
@@ -62,24 +77,32 @@ export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
   },
   {
     [QUARTZ.address]: {
-      path: [QUARTZ, UST, JEWEL],
-    },
-  },
-  {
-    [QUARTZ.address]: {
       path: [QUARTZ, QSHARE, UST],
     },
   },
+
+  // QUARTZ -> JEWEL
+  {
+    [QUARTZ.address]: {
+      path: [QUARTZ, UST, JEWEL],
+    },
+  },
+
+  // QUARTZ -> QSHARE
   {
     [QUARTZ.address]: {
       path: [QUARTZ, QSHARE],
     },
   },
+
+  // QSHARE -> UST
   {
     [QSHARE.address]: {
       path: [QSHARE, UST],
     },
   },
+
+  // QSHARE -> UST
   {
     [QSHARE.address]: {
       path: [QSHARE, UST, JEWEL],
@@ -97,6 +120,18 @@ export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
   },
   {
     [QSHARE.address]: {
+      path: [QUARTZ, QUARTZ, UST],
+    },
+  },
+  {
+    [QSHARE.address]: {
+      path: [QUARTZ, WONE, JEWEL, UST],
+    },
+  },
+
+  // QSHARE -> QUARTZ
+  {
+    [QSHARE.address]: {
       path: [QSHARE, QUARTZ],
     },
   },
@@ -108,16 +143,6 @@ export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
   {
     [QSHARE.address]: {
       path: [QSHARE, WONE, UST, QUARTZ],
-    },
-  },
-  {
-    [QSHARE.address]: {
-      path: [QUARTZ, QUARTZ, UST],
-    },
-  },
-  {
-    [QSHARE.address]: {
-      path: [QUARTZ, WONE, JEWEL, UST],
     },
   },
 

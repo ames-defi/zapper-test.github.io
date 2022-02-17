@@ -82,8 +82,8 @@ export class DexService {
     this._swapPaths.next(paths);
   }
 
-  async startQuote(amount) {
-    this.swapAmount = parseUnits(amount, 18);
+  async startQuote(amount: string, decimals: number) {
+    this.swapAmount = parseUnits(amount, decimals);
     if (this.swapAmount && this.swapInfo[0] && this.swapInfo[1]) {
       this.setSwapInfo();
     } else {

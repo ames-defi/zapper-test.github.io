@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DFK_ROUTER_HARMONY } from 'src/app/data/contracts';
-import { DexService } from 'src/lib/services/DEX/dex.service';
+import { USDC } from 'src/app/data/routes';
+import { BasicToken, DexService } from 'src/lib/services/DEX/dex.service';
 import { Web3Service } from 'src/lib/services/web3.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { Web3Service } from 'src/lib/services/web3.service';
   templateUrl: './token-swap.component.html',
   styleUrls: ['./token-swap.component.scss'],
 })
-export class TokenSwapComponent implements OnInit {
+export class TokenSwapComponent {
   dex: DexService;
   pathResults = [];
 
@@ -20,5 +21,7 @@ export class TokenSwapComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  setSwap(token0: BasicToken, token1: BasicToken, inputAmount) {
+    this.dex.startQuote(inputAmount, token0.address === USDC.address ? 6 : 18);
+  }
 }

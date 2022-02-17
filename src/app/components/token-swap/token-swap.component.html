@@ -39,7 +39,7 @@
           mat-raised-button
           color="primary"
           class="float-right"
-          (click)="dex.startQuote(inputAmount.value)"
+          (click)="setSwap(token0.value, token1.value, inputAmount.value)"
           [disabled]="!token0.value || !token1.value || !inputAmount.value">
             Quote
         </button>

@@ -46,6 +46,5 @@ export class RewardPool {
     // Listen for event
     const tx = await this.contract.deposit(poolId, parseUnits(amount));
     await awaitTransactionComplete(tx);
-    window.location.reload();
   }
 }

@@ -9,6 +9,7 @@ import { awaitTransactionComplete } from 'src/lib/utils/web3-utils';
 import { Web3Service } from '../web3.service';
 
 const ROUTER_ABI = [
+  'function WETH() pure returns (address)',
   'function getAmountsOut(uint, address[]) public view returns (uint[] memory)',
   `function swapExactTokensForTokens(
     uint,

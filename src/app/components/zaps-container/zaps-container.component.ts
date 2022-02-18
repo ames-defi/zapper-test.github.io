@@ -61,12 +61,10 @@ export class ZapsContainerComponent {
   private setEventListeners() {
     this.zapper.contract.on('ZappedInLP', (who, pairAddress, lpAmount) => {
       console.log('ZappedInLP Event');
-      window.location.reload();
     });
 
     this.zapper.contract.on('ZappedOutLP', (who, pairAddress, lpAmount) => {
       console.log('ZappedOutLP Event');
-      window.location.reload();
     });
   }
 
@@ -187,7 +185,6 @@ export class ZapsContainerComponent {
         bnAmount
       );
       await awaitTransactionComplete(tx);
-      //window.location.reload();
     }
 
     if (bnAmount.gt(pairAllowance)) {
@@ -202,7 +199,6 @@ export class ZapsContainerComponent {
         bnAmount
       );
       await awaitTransactionComplete(tx);
-      // window.location.reload();
     }
   }
 }

@@ -38,7 +38,7 @@ export const USDC = {
   address: USDC_ADDRESS,
 };
 
-export const TOKEN_LIST = [QUARTZ, QSHARE, JEWEL, UST, USDC];
+export const TOKEN_LIST = [QUARTZ, QSHARE, JEWEL, WONE, UST, USDC];
 
 export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
   // USDC -> QUARTZ
@@ -106,14 +106,24 @@ export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
     },
   },
 
-  // QSHARE -> UST
+  // QSHARE -> ONE
   {
     [QSHARE.address]: {
-      path: [QSHARE, UST],
+      path: [QSHARE, WONE],
+    },
+  },
+  {
+    [QSHARE.address]: {
+      path: [QSHARE, QUARTZ, UST, JEWEL, WONE],
+    },
+  },
+  {
+    [QSHARE.address]: {
+      path: [QSHARE, QUARTZ, UST, WONE],
     },
   },
 
-  // QSHARE -> UST
+  // QSHARE -> JEWEL
   {
     [QSHARE.address]: {
       path: [QSHARE, UST, JEWEL],
@@ -129,14 +139,26 @@ export const DFK_QUARTZ_ROUTES: { [key: string]: { path: BasicToken[] } }[] = [
       path: [QSHARE, QUARTZ, UST, JEWEL],
     },
   },
+
+  // QSHARE -> UST
   {
     [QSHARE.address]: {
-      path: [QUARTZ, QUARTZ, UST],
+      path: [QSHARE, UST],
     },
   },
   {
     [QSHARE.address]: {
-      path: [QUARTZ, WONE, JEWEL, UST],
+      path: [QSHARE, WONE, UST],
+    },
+  },
+  {
+    [QSHARE.address]: {
+      path: [QSHARE, QUARTZ, UST],
+    },
+  },
+  {
+    [QSHARE.address]: {
+      path: [QSHARE, QUARTZ, WONE, JEWEL, UST],
     },
   },
 

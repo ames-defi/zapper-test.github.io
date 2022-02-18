@@ -1,11 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ethers } from 'ethers';
-import { formatUnits, parseUnits } from 'ethers/lib/utils';
-import {
-  ZAP_CONTRACT_MAINNET_ADDRESS,
-  DFK_ROUTER_HARMONY,
-  QUARTZ_UST_DFK_LP_ADDRESS,
-} from 'src/app/data/contracts';
+import { parseUnits } from 'ethers/lib/utils';
+import { Subscription } from 'rxjs';
+import { ZAP_CONTRACT_MAINNET_ADDRESS } from 'src/app/data/contracts';
 import { QUARTZ_POOLS, QuickPool } from 'src/app/data/quartz-pools';
 import { QUARTZ, QSHARE, UST } from 'src/app/data/routes';
 import { RewardPool } from 'src/lib/services/reward-pool/reward-pool';
@@ -20,29 +17,35 @@ import { ZapOutParams } from '../zap-out/zap-out.component';
   templateUrl: './zaps-container.component.html',
   styleUrls: ['./zaps-container.component.scss'],
 })
-export class ZapsContainerComponent {
-  private zapper: Zapper;
+export class ZapsContainerComponent implements OnDestroy {
   pools = QUARTZ_POOLS;
   fetchingBalances = false;
   zapPath = [];
+  private subs = new Subscription();
 
   constructor(
     public readonly web3: Web3Service,
     public readonly rewardPool: RewardPool,
-    public readonly tokens: TokenService
+    public readonly tokens: TokenService,
+    private readonly zapper: Zapper
   ) {
-    this.zapper = new Zapper(this.web3, DFK_ROUTER_HARMONY);
-
-    this.web3.ready.subscribe((ready) => {
+    const done = async () => {
+      await this.checkLPs();
+    };
+    const readySub = this.web3.ready.subscribe((ready) => {
       if (ready) {
-        this.setEventListeners();
-        this.checkLPs();
+        done();
       }
     });
+    this.subs.add(readySub);
+    const zapSub = this.zapper.zapComplete.subscribe(done);
+    this.subs.add(zapSub);
+    const depositSub = this.rewardPool.deposited.subscribe(done);
+    this.subs.add(depositSub);
+  }
 
-    this.web3.error.subscribe((err) => {
-      console.log(err);
-    });
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   async getUserBalanceForPool(pool: QuickPool) {
@@ -56,16 +59,6 @@ export class ZapsContainerComponent {
     for (const pool of this.pools) {
       await this.getLpBalance(pool.lpAddress);
     }
-  }
-
-  private setEventListeners() {
-    this.zapper.contract.on('ZappedInLP', (who, pairAddress, lpAmount) => {
-      console.log('ZappedInLP Event');
-    });
-
-    this.zapper.contract.on('ZappedOutLP', (who, pairAddress, lpAmount) => {
-      console.log('ZappedOutLP Event');
-    });
   }
 
   private async getLpBalance(lpAddress: string) {
@@ -173,13 +166,6 @@ export class ZapsContainerComponent {
     ]);
 
     if (bnAmount.gt(inputTokenAllowance)) {
-      // await giveContactApproval(
-      //   tokenContract,
-      //   ZAP_CONTRACT_MAINNET_ADDRESS,
-      //   bnAmount,
-      //   this.web3.web3Info.userAddress
-      // );
-
       const tx = await tokenContract.approve(
         ZAP_CONTRACT_MAINNET_ADDRESS,
         bnAmount
@@ -188,12 +174,6 @@ export class ZapsContainerComponent {
     }
 
     if (bnAmount.gt(pairAllowance)) {
-      // await giveContactApproval(
-      //   pairContract,
-      //   ZAP_CONTRACT_MAINNET_ADDRESS,
-      //   bnAmount,
-      //   this.web3.web3Info.userAddress
-      // );
       const tx = await pairContract.approve(
         ZAP_CONTRACT_MAINNET_ADDRESS,
         bnAmount

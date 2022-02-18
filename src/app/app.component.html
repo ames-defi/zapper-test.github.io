@@ -9,6 +9,11 @@
 <div class="container-fluid">
 
   <mat-tab-group *ngIf="web3.connected" dynamicHeight="true">
+    <mat-tab label="Vaults">
+      <ng-template matTabContent>
+        <quartz-vaults-container></quartz-vaults-container>
+      </ng-template>
+    </mat-tab>
 
     <mat-tab label="Zaps">
       <ng-template matTabContent>
@@ -19,12 +24,6 @@
     <mat-tab label="DEX">
       <ng-template matTabContent>
         <quartz-token-swap></quartz-token-swap>
-      </ng-template>
-    </mat-tab>
-
-    <mat-tab label="Vaults">
-      <ng-template matTabContent>
-        Vaults Container
       </ng-template>
     </mat-tab>
   </mat-tab-group>

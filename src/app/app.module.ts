@@ -9,6 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSliderModule } from '@angular/material/slider';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,6 +19,7 @@ import { ZapInComponent } from './components/zap-in/zap-in.component';
 import { ZapOutComponent } from './components/zap-out/zap-out.component';
 import { ZapsContainerComponent } from './components/zaps-container/zaps-container.component';
 import { TokenSwapComponent } from './components/token-swap/token-swap.component';
+import { VaultsContainerComponent } from './components/vaults-container/vaults-container.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,7 @@ import { TokenSwapComponent } from './components/token-swap/token-swap.component
     ZapOutComponent,
     ZapsContainerComponent,
     TokenSwapComponent,
+    VaultsContainerComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +43,8 @@ import { TokenSwapComponent } from './components/token-swap/token-swap.component
     MatCardModule,
     MatInputModule,
     MatTabsModule,
+    MatExpansionModule,
+    MatSliderModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

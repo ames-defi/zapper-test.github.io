@@ -41,7 +41,7 @@ export class TokenService {
     return this.contractRefs[address];
   }
 
-  setContractRefs() {
+  private setContractRefs() {
     this.contractRefs[QUARTZ_TOKEN_ADDRESS_HARMONY] = QuartzToken.connect(
       this.web3.web3Info.signer
     );

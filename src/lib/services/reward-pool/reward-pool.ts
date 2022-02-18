@@ -24,6 +24,11 @@ export class RewardPool {
     return this._pendingRewards.asObservable();
   }
 
+  private _deposited = new Subject<boolean>();
+  get deposited() {
+    return this._deposited.asObservable();
+  }
+
   constructor(private web3: Web3Service) {
     this.contract = new ethers.Contract(
       REWARD_POOL_ADDRESS_HARMONY,
@@ -46,5 +51,6 @@ export class RewardPool {
     // Listen for event
     const tx = await this.contract.deposit(poolId, parseUnits(amount));
     await awaitTransactionComplete(tx);
+    this._deposited.next(true);
   }
 }

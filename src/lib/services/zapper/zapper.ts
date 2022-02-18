@@ -1,16 +1,26 @@
 import { BigNumber, ethers } from 'ethers';
 import { Web3Service } from '../web3.service';
-import { ZAP_CONTRACT_MAINNET_ADDRESS } from '../../../app/data/contracts';
+import {
+  DFK_ROUTER_HARMONY,
+  ZAP_CONTRACT_MAINNET_ADDRESS,
+} from '../../../app/data/contracts';
 import { ZAPPER_ABI } from './zapper-abi';
 import { awaitTransactionComplete } from 'src/lib/utils/web3-utils';
+import { Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
 
+@Injectable({ providedIn: 'root' })
 export class Zapper {
   public readonly contract: ethers.Contract;
+  private routerAddress: string;
 
-  constructor(
-    private readonly web3Service: Web3Service,
-    private routerAddress: string
-  ) {
+  private _zapComplete = new Subject<boolean>();
+  get zapComplete() {
+    return this._zapComplete.asObservable();
+  }
+
+  constructor(private readonly web3Service: Web3Service) {
+    this.routerAddress = DFK_ROUTER_HARMONY;
     this.contract = new ethers.Contract(
       ZAP_CONTRACT_MAINNET_ADDRESS,
       ZAPPER_ABI,
@@ -70,5 +80,9 @@ export class Zapper {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  setRouter(routerAddress: string) {
+    this.routerAddress = routerAddress;
   }
 }

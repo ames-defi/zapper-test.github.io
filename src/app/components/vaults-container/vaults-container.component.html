@@ -1,0 +1,122 @@
+<div class="row tab-option">
+  <div class="col-md-12 vault" *ngFor="let vault of vaultService.vaults | async">
+
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <!-- <mat-panel-title>
+            {{ vault.name }}
+          </mat-panel-title> -->
+        </mat-expansion-panel-header>
+
+        <div class="row">
+          <div class="col-md-12 clearfix" *ngIf="vault.loading">
+            <mat-spinner diameter="35" class="float-right"></mat-spinner>
+          </div>
+
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-2 bold">
+                <h3>
+                  {{ vault.name }}
+                </h3>
+
+                <p> {{ vault.tokenName }}</p>
+              </div>
+
+              <div class="col-md-2 bold">
+                <div class="text-center">
+                  {{ vault.userLpWalletBalance }}
+                </div>
+                <div class="text-center">
+                    Wallet Balance
+                </div>
+              </div>
+
+              <div class="col-md-2 bold">
+                <div class="text-center">
+                  {{ vault.userLpDepositBalance }}
+                </div>
+                <div class="text-center">
+                    Deposit Balance
+                </div>
+              </div>
+
+              <div class="col-md-2 bold">
+                <div class="text-center">
+                  {{ vault.APY | percent }}
+                </div>
+                <div class="text-center">
+                    APY
+                </div>
+              </div>
+
+              <div class="col-md-2 bold">
+                <div class="text-center">
+                  {{ vault.dailyAPR | percent  }}
+                </div>
+                <div class="text-center">
+                    Daily %
+                </div>
+              </div>
+
+              <div class="col-md-2 bold">
+                <div class="text-center">
+                  {{ vault.totalValueLocked | currency  }}
+                </div>
+                <div class="text-center">
+                    TVL
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6 clearfix deposit-withdrawl">
+                <mat-slider
+                  class="example-margin"
+                  [disabled]="!vault.userLpWalletBalance"
+                  [max]="100"
+                  [min]="0"
+                  [step]="25"
+                  [thumbLabel]="true"
+                  [(ngModel)]="depositValue">
+                </mat-slider>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  class="float-right"
+                 [disabled]="!vault.userLpWalletBalance"
+                 (click)="setVaultDeposit(vault)">
+                  Deposit
+                </button>
+              </div>
+
+              <div class="col-md-6 clearfix deposit-withdrawl">
+                <mat-slider
+                  class="example-margin"
+                  [disabled]="!vault.userLpWalletBalance"
+                  [max]="100"
+                  [min]="0"
+                  [step]="25"
+                  [thumbLabel]="true"
+                  tickInterval="auto"
+                  [(ngModel)]="withdrawValue">
+                </mat-slider>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  class="float-right"
+                 [disabled]="!vault.userLpDepositBalance"
+                  (click)="setVaultWithdrawAll(vault)">
+                  Withdraw All
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+  </div>
+</div>
